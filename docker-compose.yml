@@ -13,9 +13,5 @@ services:
     command: npm start
     volumes:
       - .:/usr/app
-      - node_modules:/usr/app/node_modules
     ports:
       - 3033:3033
-
-volumes:
-  node_modules:
