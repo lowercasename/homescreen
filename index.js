@@ -123,7 +123,7 @@ const drawScreen = async () => {
 
     context.fillStyle = '#fff';
     context.fillRect(0, 0, width, height);
-    context.fillStyle = '#000';
+    context.fillStyle = 'green';
     context.fillRect(0, 0, width, 40);
     context.font = 'bold 30px "Roboto"'
     context.fillStyle = '#fff';
