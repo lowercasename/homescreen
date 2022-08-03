@@ -85,8 +85,8 @@ const ISODate = (date) => {
 
 const truncate = (context, string, maxLength) => {
     let output = ""
-    if (string == "") {
-        return string;
+    if (!string || string == "") {
+        return "";
     }
     while (!output) {
         let width = context.measureText(string).width;
