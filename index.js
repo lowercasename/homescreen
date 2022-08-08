@@ -143,7 +143,7 @@ const drawScreen = async () => {
   const leftColumnWidth = width - rightColumnWidth;
   const rightColumnOffset = leftColumnWidth;
 
-  context.fillStyle = "#eee";
+  context.fillStyle = "#ccc";
   context.fillRect(rightColumnOffset - 10, 40, rightColumnWidth + 10, 270);
 
   context.fillStyle = "green";
