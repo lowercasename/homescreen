@@ -83,11 +83,11 @@ const reminders = {
 const pressureIcon = (pressure) => {
   if (pressure < 970) {
     return "\uf76c";
-  } else if (970 <= pressure < 990) {
+  } else if (pressure >= 970 && pressure < 990) {
     return "\uf73d";
-  } else if (990 <= pressure < 1010) {
+  } else if (pressure >= 990 && pressure < 1010) {
     return "\uf0c2";
-  } else if (1010 <= pressure < 1030) {
+  } else if (pressure >= 1010 && pressure < 1030) {
     return "\uf6c4";
   } else if (pressure >= 1030) {
     return "\uf185";
