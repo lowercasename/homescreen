@@ -314,22 +314,22 @@ const drawScreen = async () => {
     context.font = '24px "Roboto"';
     context.fillText(
       `${Math.round(sensor.temperature * 100) / 100}°`,
-      rightColumnOffset + 30,
+      rightColumnOffset + 40,
       340
     );
     context.fillText(
       `${Math.round(sensor.humidity * 100) / 100}%`,
-      rightColumnOffset + 30,
+      rightColumnOffset + 40,
       370
     );
     context.fillText(
       `${Math.round(sensor.pressure * 100) / 100}`,
-      rightColumnOffset + 30,
+      rightColumnOffset + 40,
       400
     );
     context.fillText(
       `${capitalizeFirstLetter(sensor.pressure_description)}`,
-      rightColumnOffset + 30,
+      rightColumnOffset + 40,
       430
     );
   }
