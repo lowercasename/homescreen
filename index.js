@@ -177,83 +177,98 @@ const drawScreen = async () => {
   //   context.strokeStyle = "green";
   //   context.stroke();
 
-  const sensorResponse = await fetch("http://192.168.0.31/");
-  const sensor = await sensorResponse.json();
-  const weatherResponse = await fetch("http://192.168.0.41:5000/weather");
-  const weather = await weatherResponse.json();
-  const foodResponse = await fetch(
-    "http://192.168.0.4:8080/api/v1/food-plan?date=" + ISODate(today)
-  );
-  let food = await foodResponse.json();
-  food = food.filter(
-    (day) => ISODate(new Date(day.date)) === ISODate(today)
-  )[0];
+  let sensor, weather, food;
+  try {
+    const sensorResponse = await fetch("http://192.168.0.31");
+    sensor = await sensorResponse.json();
+  } catch {
+    sensor = false;
+  }
+  try {
+    const weatherResponse = await fetch("http://192.168.0.41:5000/weather");
+    weather = await weatherResponse.json();
+  } catch {
+    weather = false;
+  }
+  try {
+    const foodResponse = await fetch(
+      "http://192.168.0.4:8080/api/v1/food-plan?date=" + ISODate(today)
+    );
+    food = await foodResponse.json();
+    food = food.filter(
+      (day) => ISODate(new Date(day.date)) === ISODate(today)
+    )[0];
+  } catch {
+    food = false;
+  }
 
-  const todayWeatherImage = await loadImage(
-    `./images/${weatherCodesMap[weather.today.weatherCode]}`
-  );
-  const tomorrowWeatherImage = await loadImage(
-    `./images/${weatherCodesMap[weather.tomorrow.weatherCode]}`
-  );
-  context.drawImage(todayWeatherImage, 0, 50);
-  context.drawImage(tomorrowWeatherImage, leftColumnWidth + 10, 90);
+  if (weather) {
+    const todayWeatherImage = await loadImage(
+      `./images/${weatherCodesMap[weather.today.weatherCode]}`
+    );
+    const tomorrowWeatherImage = await loadImage(
+      `./images/${weatherCodesMap[weather.tomorrow.weatherCode]}`
+    );
+    context.drawImage(todayWeatherImage, 0, 50);
+    context.drawImage(tomorrowWeatherImage, leftColumnWidth + 10, 90);
 
-  context.fillStyle = "#000";
-  context.font = 'bold 100px "Roboto"';
-  const currentTempWidth = context.measureText(
-    `${Math.round(weather.today.temperatureCurrent)}°`
-  ).width;
-  const todayWeatherOffset = currentTempWidth + 100 + 20;
-  context.fillText(
-    `${Math.round(weather.today.temperatureCurrent)}°`,
-    110,
-    135
-  );
+    context.fillStyle = "#000";
+    context.font = 'bold 100px "Roboto"';
+    const currentTempWidth = context.measureText(
+      `${Math.round(weather.today.temperatureCurrent)}°`
+    ).width;
+    const todayWeatherOffset = currentTempWidth + 100 + 20;
+    context.fillText(
+      `${Math.round(weather.today.temperatureCurrent)}°`,
+      110,
+      135
+    );
 
-  context.font = '24px "Roboto"';
-  context.fillText(
-    weatherDescriptionsMap[weather.today.weatherCode][1],
-    todayWeatherOffset,
-    75
-  );
-  context.fillText(
-    `${Math.round(weather.today.temperatureMax)}° / ${Math.round(
-      weather.today.temperatureMin
-    )}°`,
-    todayWeatherOffset,
-    105
-  );
-  context.font = 'bold 24px "Font Awesome 6 Pro"';
-  context.fillText("\uf75c", todayWeatherOffset, 135);
-  context.font = '24px "Roboto"';
-  context.fillText(
-    `${weather.today.precipitationChance}%`,
-    todayWeatherOffset + 30,
-    135
-  );
+    context.font = '24px "Roboto"';
+    context.fillText(
+      weatherDescriptionsMap[weather.today.weatherCode][1],
+      todayWeatherOffset,
+      75
+    );
+    context.fillText(
+      `${Math.round(weather.today.temperatureMax)}° / ${Math.round(
+        weather.today.temperatureMin
+      )}°`,
+      todayWeatherOffset,
+      105
+    );
+    context.font = 'bold 24px "Font Awesome 6 Pro"';
+    context.fillText("\uf75c", todayWeatherOffset, 135);
+    context.font = '24px "Roboto"';
+    context.fillText(
+      `${weather.today.precipitationChance}%`,
+      todayWeatherOffset + 30,
+      135
+    );
 
-  context.fillText(
-    weatherDescriptionsMap[weather.tomorrow.weatherCode][1],
-    rightColumnOffset + 10,
-    220
-  );
-  context.fillText(
-    `${Math.round(weather.tomorrow.temperatureMax)}° / ${Math.round(
-      weather.tomorrow.temperatureMin
-    )}°`,
-    rightColumnOffset + 10,
-    250
-  );
-  context.font = 'bold 24px "Font Awesome 6 Pro"';
-  context.fillText("\uf75c", rightColumnOffset + 10, 280);
-  context.font = '24px "Roboto"';
-  context.fillText(
-    `${weather.tomorrow.precipitationChance}%`,
-    rightColumnOffset + 40,
-    280
-  );
+    context.fillText(
+      weatherDescriptionsMap[weather.tomorrow.weatherCode][1],
+      rightColumnOffset + 10,
+      220
+    );
+    context.fillText(
+      `${Math.round(weather.tomorrow.temperatureMax)}° / ${Math.round(
+        weather.tomorrow.temperatureMin
+      )}°`,
+      rightColumnOffset + 10,
+      250
+    );
+    context.font = 'bold 24px "Font Awesome 6 Pro"';
+    context.fillText("\uf75c", rightColumnOffset + 10, 280);
+    context.font = '24px "Roboto"';
+    context.fillText(
+      `${weather.tomorrow.precipitationChance}%`,
+      rightColumnOffset + 40,
+      280
+    );
+  }
 
-  if (food && Object.keys(food).length > 0) {
+  if (food) {
     context.fillStyle = "green";
     context.font = 'bold 24px "Roboto"';
     context.fillText("Breakfast", 0, 180);
@@ -288,34 +303,36 @@ const drawScreen = async () => {
     context.fillText(reminders[today.getDay()], 35, 373);
   }
 
-  context.fillStyle = "#000";
-  context.font = 'bold 24px "Font Awesome 6 Pro"';
-  context.fillText("\uf2c9", rightColumnOffset, 340);
-  context.fillText("\uf750", rightColumnOffset, 370);
-  context.fillText("\uf72e", rightColumnOffset, 400);
-  context.fillText(pressureIcon(sensor.pressure), rightColumnOffset, 430);
+  if (sensor) {
+    context.fillStyle = "#000";
+    context.font = 'bold 24px "Font Awesome 6 Pro"';
+    context.fillText("\uf2c9", rightColumnOffset, 340);
+    context.fillText("\uf750", rightColumnOffset, 370);
+    context.fillText("\uf72e", rightColumnOffset, 400);
+    context.fillText(pressureIcon(sensor.pressure), rightColumnOffset, 430);
 
-  context.font = '24px "Roboto"';
-  context.fillText(
-    `${Math.round(sensor.temperature * 100) / 100}°`,
-    rightColumnOffset + 30,
-    340
-  );
-  context.fillText(
-    `${Math.round(sensor.humidity * 100) / 100}%`,
-    rightColumnOffset + 30,
-    370
-  );
-  context.fillText(
-    `${Math.round(sensor.pressure * 100) / 100}`,
-    rightColumnOffset + 30,
-    400
-  );
-  context.fillText(
-    `${capitalizeFirstLetter(sensor.pressure_description)}`,
-    rightColumnOffset + 30,
-    430
-  );
+    context.font = '24px "Roboto"';
+    context.fillText(
+      `${Math.round(sensor.temperature * 100) / 100}°`,
+      rightColumnOffset + 30,
+      340
+    );
+    context.fillText(
+      `${Math.round(sensor.humidity * 100) / 100}%`,
+      rightColumnOffset + 30,
+      370
+    );
+    context.fillText(
+      `${Math.round(sensor.pressure * 100) / 100}`,
+      rightColumnOffset + 30,
+      400
+    );
+    context.fillText(
+      `${capitalizeFirstLetter(sensor.pressure_description)}`,
+      rightColumnOffset + 30,
+      430
+    );
+  }
 
   context.fillStyle = "#000";
   context.font = '16px "Roboto"';
