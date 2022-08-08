@@ -80,6 +80,22 @@ const reminders = {
   1: "Put the bins out",
 };
 
+const pressureIcon = (pressure) => {
+  if (pressure < 970) {
+    return "\uf76c";
+  } else if (970 <= pressure < 990) {
+    return "\uf73d";
+  } else if (990 <= pressure < 1010) {
+    return "\uf0c2";
+  } else if (1010 <= pressure < 1030) {
+    return "\uf6c4";
+  } else if (pressure >= 1030) {
+    return "\uf185";
+  } else {
+    return "";
+  }
+};
+
 const ISODate = (date) => {
   return date.toISOString().split("T")[0];
 };
@@ -105,6 +121,10 @@ const truncate = (context, string, maxLength) => {
   }
   return output;
 };
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -157,9 +177,10 @@ const drawScreen = async () => {
   //   context.strokeStyle = "green";
   //   context.stroke();
 
+  const sensorResponse = await fetch("http://192.168.0.31/");
+  const sensor = await sensorResponse.json();
   const weatherResponse = await fetch("http://192.168.0.41:5000/weather");
   const weather = await weatherResponse.json();
-  console.log(weather);
   const foodResponse = await fetch(
     "http://192.168.0.4:8080/api/v1/food-plan?date=" + ISODate(today)
   );
@@ -167,7 +188,6 @@ const drawScreen = async () => {
   food = food.filter(
     (day) => ISODate(new Date(day.date)) === ISODate(today)
   )[0];
-  console.log(food);
 
   const todayWeatherImage = await loadImage(
     `./images/${weatherCodesMap[weather.today.weatherCode]}`
@@ -267,6 +287,35 @@ const drawScreen = async () => {
     context.font = '20px "Roboto"';
     context.fillText(reminders[today.getDay()], 35, 373);
   }
+
+  context.fillStyle = "#000";
+  context.font = 'bold 24px "Font Awesome 6 Pro"';
+  context.fillText("\uf2c9", rightColumnOffset, 340);
+  context.fillText("\uf750", rightColumnOffset, 370);
+  context.fillText("\uf72e", rightColumnOffset, 400);
+  context.fillText(pressureIcon(sensor.pressure), rightColumnOffset, 430);
+
+  context.font = '24px "Roboto"';
+  context.fillText(
+    `${Math.round(sensor.temperature * 100) / 100}°`,
+    rightColumnOffset + 30,
+    340
+  );
+  context.fillText(
+    `${Math.round(sensor.humidity * 100) / 100}%`,
+    rightColumnOffset + 30,
+    370
+  );
+  context.fillText(
+    `${Math.round(sensor.pressure * 100) / 100}`,
+    rightColumnOffset + 30,
+    400
+  );
+  context.fillText(
+    `${capitalizeFirstLetter(sensor.pressure_description)}`,
+    rightColumnOffset + 30,
+    430
+  );
 
   context.fillStyle = "#000";
   context.font = '16px "Roboto"';
