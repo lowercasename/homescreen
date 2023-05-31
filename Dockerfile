@@ -6,7 +6,9 @@ RUN apt-get update && apt-get install -y \
     libpango1.0-dev \
     libjpeg-dev \
     libgif-dev \
-    librsvg2-dev
+    librsvg2-dev \
+    tzdata \
+ENV TZ=Europe/London
 WORKDIR /usr/app
 COPY package*.json ./
 RUN npm install
