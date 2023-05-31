@@ -12,6 +12,6 @@ services:
       - NODE_ENV=production
     command: npm start
     volumes:
-      - .:/usr/app
+      - ./config:/usr/app/config
     ports:
       - 3033:3033
