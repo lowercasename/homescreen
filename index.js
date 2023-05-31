@@ -172,21 +172,41 @@ const drawRoundRect = (context, x, y, width, height, radius) => {
   context.closePath();
 };
 
-const scenes = {
+const entities = {
   "bedroom_chill": {
     entityId: "scene.bedroom_chill",
     fontAwesomeIcon: "\ue392",
     label: "Chill",
+    domain: "scene",
+    service: "turn_on",
   },
   "bedroom_on": {
     entityId: "scene.bedroom_on",
     fontAwesomeIcon: "\uf672",
     label: "Bright",
+    domain: "scene",
+    service: "turn_on",
   },
   "sleep": {
     entityId: "scene.sleep",
     fontAwesomeIcon: "\uf755",
     label: "Sleep",
+    domain: "scene",
+    service: "turn_on",
+  },
+  "office_bedside_lamp": {
+    entityId: "light.office_bedside_lamp",
+    fontAwesomeIcon: "\uf0eb",
+    label: "Office",
+    domain: "light",
+    service: "toggle",
+  },
+  "arnold": {
+    entityId: "vacuum.arnold",
+    fontAwesomeIcon: "\ue04e",
+    label: "Arnold",
+    domain: "vacuum",
+    service: "toggle",
   },
 };
 
@@ -212,11 +232,11 @@ const drawScreen = async () => {
 
   context.drawImage(weatherImage, 0, 0, 80, 80);
   context.fillStyle = "#000";
-  context.font = '400 40px "Signika"';
+  context.font = '300 40px "Signika"';
   context.fillText(
     `${Math.round(weather.temperature)}°C`,
     90,
-    45
+    40
   );
   context.font = '300 25px "Signika"';
   context.fillText(
@@ -252,8 +272,8 @@ const drawScreen = async () => {
   // const backgroundImageRatio = backgroundImage.width / backgroundImage.height;
   context.drawImage(randomImage, 0, 90, 600, 358);
 
-  for (let i = 0; i < Object.keys(scenes).length; i++) {
-    const scene = scenes[Object.keys(scenes)[i]];
+  for (let i = 0; i < Object.keys(entities).length; i++) {
+    const entity = entities[Object.keys(entities)[i]];
     drawRoundRect(context, 10 + i * 120, 340, 100, 100, 10);
     context.fillStyle = "rgba(255, 255, 255, 0.8)";
     context.fill();
@@ -263,160 +283,17 @@ const drawScreen = async () => {
     context.fillStyle = "#000";
     context.font = '300 40px "Font Awesome 6 Pro"';
     context.fillText(
-      `${scene.fontAwesomeIcon}`,
+      `${entity.fontAwesomeIcon}`,
       25 + i * 120,
       390
     );
     context.font = '400 20px "Signika"';
     context.fillText(
-      `${scene.label}`,
+      `${entity.label}`,
       25 + i * 120,
-      420
+      425
     );
   }
-
-  // if (weather) {
-  //   const todayWeatherImage = await loadImage(
-  //     `./images/${weatherCodesMap[weather.today.weatherCode]}`
-  //   );
-  //   const tomorrowWeatherImage = await loadImage(
-  //     `./images/${weatherCodesMap[weather.tomorrow.weatherCode]}`
-  //   );
-  //   context.drawImage(todayWeatherImage, 0, 50);
-  //   context.drawImage(tomorrowWeatherImage, leftColumnWidth + 10, 90);
-
-  //   context.fillStyle = "#000";
-  //   context.font = 'bold 100px "Roboto"';
-  //   const currentTempWidth = context.measureText(
-  //     `${Math.round(weather.today.temperatureCurrent)}°`
-  //   ).width;
-  //   const todayWeatherOffset = currentTempWidth + 100 + 20;
-  //   context.fillText(
-  //     `${Math.round(weather.today.temperatureCurrent)}°`,
-  //     110,
-  //     135
-  //   );
-
-  //   context.font = '24px "Roboto"';
-  //   context.fillText(
-  //     weatherDescriptionsMap[weather.today.weatherCode][1],
-  //     todayWeatherOffset,
-  //     75
-  //   );
-  //   context.fillText(
-  //     `${Math.round(weather.today.temperatureMax)}° / ${Math.round(
-  //       weather.today.temperatureMin
-  //     )}°`,
-  //     todayWeatherOffset,
-  //     105
-  //   );
-  //   context.font = 'bold 24px "Font Awesome 6 Pro"';
-  //   context.fillText("\uf75c", todayWeatherOffset, 135);
-  //   context.font = '24px "Roboto"';
-  //   context.fillText(
-  //     `${weather.today.precipitationChance}%`,
-  //     todayWeatherOffset + 30,
-  //     135
-  //   );
-
-  //   context.fillText(
-  //     weatherDescriptionsMap[weather.tomorrow.weatherCode][1],
-  //     rightColumnOffset + 10,
-  //     220
-  //   );
-  //   context.fillText(
-  //     `${Math.round(weather.tomorrow.temperatureMax)}° / ${Math.round(
-  //       weather.tomorrow.temperatureMin
-  //     )}°`,
-  //     rightColumnOffset + 10,
-  //     250
-  //   );
-  //   context.font = 'bold 24px "Font Awesome 6 Pro"';
-  //   context.fillText("\uf75c", rightColumnOffset + 10, 280);
-  //   context.font = '24px "Roboto"';
-  //   context.fillText(
-  //     `${weather.tomorrow.precipitationChance}%`,
-  //     rightColumnOffset + 40,
-  //     280
-  //   );
-  // }
-
-  // if (food) {
-  //   context.fillStyle = "green";
-  //   context.font = 'bold 24px "Roboto"';
-  //   context.fillText("Breakfast", 0, 180);
-  //   context.fillText("Lunch", 0, 240);
-  //   context.fillText("Dinner", 0, 300);
-  //   context.fillStyle = "#000";
-  //   context.font = '20px "Roboto"';
-  //   context.fillText(
-  //     truncate(context, food.breakfast, leftColumnWidth - 10),
-  //     0,
-  //     205
-  //   );
-  //   context.fillText(
-  //     truncate(context, food.lunch, leftColumnWidth - 10),
-  //     0,
-  //     265
-  //   );
-  //   context.fillText(
-  //     truncate(context, food.dinner, leftColumnWidth - 10),
-  //     0,
-  //     325
-  //   );
-  // }
-
-  // if (reminders[today.getDay()]) {
-  //   context.fillStyle = "green";
-  //   context.fillRect(0, 350, leftColumnWidth - 20, 32);
-  //   context.fillStyle = "#fff";
-  //   context.font = 'bold 20px "Font Awesome 6 Pro"';
-  //   context.fillText("\uf848", 10, 373);
-  //   context.font = '20px "Roboto"';
-  //   context.fillText(reminders[today.getDay()], 35, 373);
-  // }
-
-  // if (sensor) {
-  //   context.fillStyle = "#000";
-  //   context.font = 'bold 24px "Font Awesome 6 Pro"';
-  //   context.fillText("\uf2c9", rightColumnOffset, 340);
-  //   context.fillText("\uf750", rightColumnOffset, 370);
-  //   context.fillText("\uf72e", rightColumnOffset, 400);
-  //   context.fillText(pressureIcon(sensor.pressure), rightColumnOffset, 430);
-
-  //   context.font = '24px "Roboto"';
-  //   context.fillText(
-  //     `${Math.round(sensor.temperature * 100) / 100}°`,
-  //     rightColumnOffset + 40,
-  //     340
-  //   );
-  //   context.fillText(
-  //     `${Math.round(sensor.humidity * 100) / 100}%`,
-  //     rightColumnOffset + 40,
-  //     370
-  //   );
-  //   context.fillText(
-  //     `${Math.round(sensor.pressure * 100) / 100}`,
-  //     rightColumnOffset + 40,
-  //     400
-  //   );
-  //   context.fillText(
-  //     `${capitalizeFirstLetter(sensor.pressure_description)}`,
-  //     rightColumnOffset + 40,
-  //     430
-  //   );
-  // }
-
-  // context.fillStyle = "#000";
-  // context.font = '16px "Roboto"';
-  // context.fillText(
-  //   `Last updated: ${today.toLocaleTimeString("en-GB", {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   })}`,
-  //   0,
-  //   440
-  // );
 
   const buffer = canvas.toBuffer("image/jpeg", {
     quality: 0.65,
@@ -428,6 +305,26 @@ const drawScreen = async () => {
 app.get("/dashboard.jpg", async (req, res) => {
   await drawScreen();
   res.sendFile("screen.jpg", { root: "." });
+});
+
+app.get("/button/:id(\\d+)", async (req, res) => {
+  const entity = entities[Object.keys(entities)[req.params.id]];
+  if (!entity) {
+    res.status(404).send("Not found");
+    return;
+  }
+  const hassResponse = await fetch(`http://192.168.125.21:8123/api/services/${entity.domain}/${entity.service}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: "Bearer " + process.env.HASS_TOKEN,
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      entity_id: entity.entityId
+    })
+  });
+  const hassData = await hassResponse.json();
+  res.send(hassData);
 });
 
 app.listen(port, () => {
