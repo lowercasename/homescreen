@@ -230,7 +230,7 @@ const drawScreen = async () => {
     `./images/${weather.icon}`
   );
 
-  context.drawImage(weatherImage, 0, 0, 80, 80);
+  context.drawImage(weatherImage, 5, 10, 70, 70);
   context.fillStyle = "#000";
   context.font = '300 40px "Signika"';
   context.fillText(
@@ -271,6 +271,27 @@ const drawScreen = async () => {
   );
   // const backgroundImageRatio = backgroundImage.width / backgroundImage.height;
   context.drawImage(randomImage, 0, 90, 600, 358);
+
+  // Draw last updated time
+  context.fillStyle = "#fff";
+  context.font = '500 12px "Signika"';
+  // Add shadow to last updated time
+  context.shadowColor = "rgba(0, 0, 0, 1)";
+  context.shadowBlur = 5;
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
+  context.fillText(
+    `Updated ${today.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`,
+    12,
+    330
+  );
+  context.shadowColor = "rgba(0, 0, 0, 0)";
+  context.shadowBlur = 0;
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
 
   for (let i = 0; i < Object.keys(entities).length; i++) {
     const entity = entities[Object.keys(entities)[i]];
