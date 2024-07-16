@@ -206,7 +206,7 @@ const entities = {
     fontAwesomeIcon: "\ue04e",
     label: "Arnold",
     domain: "vacuum",
-    service: "toggle",
+    service: "start_pause",
   },
 };
 
